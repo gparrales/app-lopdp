@@ -26,10 +26,10 @@ export default function App() {
   const totalPreguntas = PREGUNTAS_LOPDP.length;
 
   const seleccionarRespuesta = (valor) => {
-    // Registramos la respuesta
-    setRespuestas(prev => ({ ...prev, [preguntaActual]: valor }));
-    
-    // Cambiamos de pregunta inmediatamente forzando el nuevo render
+    setRespuestas({ ...respuestas, [preguntaActual]: valor });
+  };
+
+  const avanzarPregunta = () => {
     if (preguntaActual < totalPreguntas - 1) {
       setPreguntaActual(preguntaActual + 1);
     } else {
@@ -48,7 +48,7 @@ export default function App() {
     } else if (porcentaje >= 70) {
       return { color: 'text-amber-600', bg: 'bg-amber-50 border-amber-200', mensaje: 'Tu organización tiene implementadas varias acciones en lo que respecta a la LOPDP pero necesitas mejorar para evitar sanciones.' };
     } else {
-      return { color: 'text-red-600', bg: 'bg-red-50 border-red-200', mensaje: 'Tu organización tiene vacíos que pueden provocar severas sanciones si no tomas correctivos a la brevedad posible.' };
+      return { color: 'text-red-600', bg: 'bg-red-50 border-red-200', mensaje: 'Tu organización tiene vacíos que pueden acarrear severas sanciones si no tomas correctivos a la brevedad posible.' };
     }
   };
 
@@ -101,7 +101,6 @@ export default function App() {
           {pantalla === 'cuestionario' && (
             <div>
               <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-100">
-                {/* Solución al contador: Lee directamente el estado actual primitivo de manera lineal */}
                 <span className="text-sm font-bold bg-slate-100 text-slate-600 px-3 py-1 rounded-md">
                   Pregunta {preguntaActual + 1} de {totalPreguntas}
                 </span>
@@ -125,20 +124,42 @@ export default function App() {
               </div>
 
               {/* Opciones SI / NO */}
-              <div className="grid grid-cols-2 gap-4 mb-2">
+              <div className="grid grid-cols-2 gap-4 mb-8">
                 <button
                   type="button"
                   onClick={() => seleccionarRespuesta('SI')}
-                  className="py-5 rounded-xl font-bold text-xl border-2 bg-white border-slate-200 text-slate-700 hover:bg-emerald-50 hover:border-emerald-500 hover:text-emerald-600 transition-all cursor-pointer active:bg-emerald-500 active:text-white"
+                  className={`py-4 rounded-xl font-bold text-lg border-2 transition-all cursor-pointer ${
+                    respuestas[preguntaActual] === 'SI'
+                      ? 'bg-emerald-500 border-emerald-600 text-white shadow-md'
+                      : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                  }`}
                 >
                   SÍ
                 </button>
                 <button
                   type="button"
                   onClick={() => seleccionarRespuesta('NO')}
-                  className="py-5 rounded-xl font-bold text-xl border-2 bg-white border-slate-200 text-slate-700 hover:bg-red-50 hover:border-red-500 hover:text-red-600 transition-all cursor-pointer active:bg-red-500 active:text-white"
+                  className={`py-4 rounded-xl font-bold text-lg border-2 transition-all cursor-pointer ${
+                    respuestas[preguntaActual] === 'NO'
+                      ? 'bg-red-500 border-red-600 text-white shadow-md'
+                      : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                  }`}
                 >
                   NO
+                </button>
+              </div>
+
+              <div className="flex justify-end">
+                <button
+                  onClick={avanzarPregunta}
+                  disabled={!respuestas[preguntaActual]}
+                  className={`w-full sm:w-auto px-8 py-3 rounded-xl font-semibold shadow transition-all ${
+                    respuestas[preguntaActual]
+                      ? 'bg-slate-800 hover:bg-slate-900 text-white cursor-pointer'
+                      : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                  }`}
+                >
+                  {preguntaActual === totalPreguntas - 1 ? 'Ver Resultados' : 'Siguiente pregunta →'}
                 </button>
               </div>
             </div>
