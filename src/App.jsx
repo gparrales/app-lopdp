@@ -48,7 +48,7 @@ export default function App() {
     } else if (porcentaje >= 70) {
       return { color: 'text-amber-600', bg: 'bg-amber-50 border-amber-200', mensaje: 'Tu organización tiene implementadas varias acciones en lo que respecta a la LOPDP pero necesitas mejorar para evitar sanciones.' };
     } else {
-      return { color: 'text-red-600', bg: 'bg-red-50 border-red-200', mensaje: 'Tu organización tiene vacíos que pueden provocar severas sanciones si no tomas correctivos a la brevedad posible.' };
+      return { color: 'text-red-600', bg: 'bg-red-50 border-red-200', mensaje: 'Tu organización tiene vacíos que pueden acarrear severas sanciones si no tomas correctivos a la brevedad posible.' };
     }
   };
 
