@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+@theme {
+  --color-geekerds-blue: #1a64a4;
+  --color-geekerds-red: #e2231a;
+}
