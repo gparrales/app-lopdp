@@ -26,15 +26,19 @@ export default function App() {
   const totalPreguntas = PREGUNTAS_LOPDP.length;
 
   const seleccionarRespuesta = (valor) => {
-    // Registramos la respuesta
+    // 1. Guardamos la respuesta de forma segura aislada
     setRespuestas(prev => ({ ...prev, [preguntaActual]: valor }));
     
-    // Cambiamos de pregunta inmediatamente forzando el nuevo render
-    if (preguntaActual < totalPreguntas - 1) {
-      setPreguntaActual(preguntaActual + 1);
-    } else {
-      setPantalla('resultado');
-    }
+    // 2. Avanzamos el índice usando el estado previo garantizado por React (Fijación de Bug)
+    setPreguntaActual((prevIndex) => {
+      const siguienteSugerido = prevIndex + 1;
+      if (siguienteSugerido < totalPreguntas) {
+        return siguienteSugerido;
+      } else {
+        setPantalla('resultado');
+        return prevIndex;
+      }
+    });
   };
 
   const calcularPorcentaje = () => {
@@ -101,7 +105,6 @@ export default function App() {
           {pantalla === 'cuestionario' && (
             <div>
               <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-100">
-                {/* Solución al contador: Lee directamente el estado actual primitivo de manera lineal */}
                 <span className="text-sm font-bold bg-slate-100 text-slate-600 px-3 py-1 rounded-md">
                   Pregunta {preguntaActual + 1} de {totalPreguntas}
                 </span>
